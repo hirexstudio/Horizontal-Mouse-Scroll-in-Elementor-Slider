@@ -1,0 +1,5 @@
+Add those attributes in elementor attributes:- 
+
+data-contain-scroll|no
+data-scoll-to-view|yes
+data-block-position|end
