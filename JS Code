@@ -1,0 +1,97 @@
+<script>
+/* Updated */
+    ;(w => {
+        let $, currentSwiper, containScroll, originalCount;
+        const sliderSelector = '.swiper-horizontal-slide';
+
+        w.addEventListener('DOMContentLoaded', () => {
+            $ = jQuery;
+            initWheelListener();
+            initContainers();
+        })
+
+        const shouldScrollHorizontal = direction => {
+            
+            const realIndex = currentSwiper.realIndex;
+            const isFirst = realIndex === 0;
+            const isLast = realIndex +1 === originalCount;
+            
+            if (!currentSwiper) {
+                return false;
+            }
+
+            if (direction === 'up') {
+                if(isLast && containScroll !== true){
+                    currentSwiper = undefined;
+                    return false;
+                }
+                currentSwiper.slideNext();
+                return true;
+                
+            } else {
+                if (isFirst && containScroll !== true) {
+                    currentSwiper = undefined;
+                    return false;
+                }
+                currentSwiper.slidePrev();
+                return true;
+            }
+
+            return false; /* No horizontal scroll occurred */
+        }
+
+        /*
+        On Mouse over a container set its swiper as currentSwiper
+        On mouse out on a container set the currentSwiper to undefined
+        */
+        const initContainers = () => {
+            let $sliders = $(sliderSelector);
+            
+            /* Can't get original slide count from Swiper API. Get count before Swiper initalises 
+            Store as a data attribute
+            */
+            $sliders.each(function(){
+                $e= $(this);
+                $e.data('original-count', $e.find('.swiper-slide').length );
+            })
+        }
+
+        const initWheelListener = () => {
+            document.querySelector('main').addEventListener('wheel', evt => {
+
+                const {deltaY,target} = evt;
+                const direction = deltaY > 0 ? 'up' : 'down';
+                const swiperContainer = $(target).closest(sliderSelector);
+                
+                if(swiperContainer.length !== 1){
+                    currentSwiper = undefined;
+                }else{
+                    currentSwiper = swiperContainer.find('.swiper-container').data('swiper');
+                    originalCount = swiperContainer.data('original-count');
+                    
+                     if(swiperContainer.data('contain-scroll') === 'yes'){
+                        containScroll = true;
+                    }else{
+                        containScroll = false;
+                    }
+                }
+                
+                if(swiperContainer.data('scoll-to-view') === 'yes'){
+                    const position = swiperContainer.data('block-position');
+                    swiperContainer[0].scrollIntoView({ block: position,  behavior: 'smooth' });
+                }
+            
+                
+                if (!currentSwiper) {
+                    return;
+                }
+
+                if (true === shouldScrollHorizontal(direction)) {
+                    evt.preventDefault();
+                } 
+
+            });
+        }
+
+    })(window)
+</script>
