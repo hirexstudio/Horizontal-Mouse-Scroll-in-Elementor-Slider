@@ -1,6 +1,6 @@
 ** First we need to INACTIVE Swiper JS Library From Elementor Experiment panel to work perfectly horizontal mouse scroll.
 
-** Add class name to elementor slider/carousel widget : swiper-horizontal-slide
+** Add class name to elementor slider/carousel widget or container : swiper-horizontal-slide
 
 Video Tutorial Link:- https://youtu.be/hCelz_5ihJo?si=Twb_6Fn815QIVNjD
 
